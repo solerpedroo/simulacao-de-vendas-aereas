@@ -27,18 +27,23 @@ while opt != 6:
     opt = int(input('\n\033[1mSelecione a opção desejada:\033[m\n[1] - Cadastrar novo voo\n[2] - Consultar voos\n[3] - Consultar passageiros de um voo\n[4] - Vender passsagens\n[5] - Cancelar passagens\n[6] - Sair\n>> '))
 
     if opt == 1:
-        num_voo = randint(1000, 9999)
-        while num_voo in voos.keys():
+        resposta = 'S'
+        while resposta == 'S':
             num_voo = randint(1000, 9999)
-        informacoes.clear()
-        informacoes.append(input('\nInforme a cidade de origem: '))
-        informacoes.append(input('Informe a cidade de destino: '))
-        informacoes.append(int(input('Informe a quantidade de escalas: ')))
-        informacoes.append(float(input('Informe o valor das passagens: R$')))
-        informacoes.append(int(input('Informe a quantidade de lugares disponíveis: ')))
-        informacoes.append(list())
-        voos[num_voo] = informacoes
-        print('\n\033[1m>> Voo cadastrado com sucesso! <<\033[m')
+            while num_voo in voos.keys():
+                num_voo = randint(1000, 9999)
+            informacoes.clear()
+            informacoes.append(input('\nInforme a cidade de origem: '))
+            informacoes.append(input('Informe a cidade de destino: '))
+            informacoes.append(int(input('Informe a quantidade de escalas: ')))
+            informacoes.append(float(input('Informe o valor das passagens: R$')))
+            informacoes.append(int(input('Informe a quantidade de lugares disponíveis: ')))
+            informacoes.append(list())
+            voos[num_voo] = informacoes
+            print('\n\033[1m>> Voo cadastrado com sucesso! <<\033[m')
+            resposta = input('Deseja continuar cadastrando? [S/N]\n>> ').upper()
+            while resposta != 'S' and resposta != 'N':
+                resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
         
     elif opt == 2:
         opt = 0
@@ -135,50 +140,60 @@ while opt != 6:
             print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
 
     elif opt == 4:
-        cpf = input('\nInforme o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
-        while cpf not in passageiros.keys():
-            resposta = input('O CPF digitado não consta nos registros.\nDeseja cadastrá-lo no sistema? [S/N]\n>> ').upper()
+        resposta = 'S'
+        while resposta == 'S':
+            cpf = input('\nInforme o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
+            while cpf not in passageiros.keys():
+                resposta = input('O CPF digitado não consta nos registros.\nDeseja cadastrá-lo no sistema? [S/N]\n>> ').upper()
+                while resposta != 'S' and resposta != 'N':
+                    resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
+                if resposta == 'S':
+                    print(f'\033[1m{">> CADASTRO DE PASSAGEIROS <<":^60}\033[m\n')
+                    informacoes.clear()
+                    informacoes.append(input('Informe o nome do novo passageiro: ').title())
+                    informacoes.append(input('Informe o telefone do novo passageiro no modelo (XX)XXXXX-XXXX: '))
+                    informacoes.append(list())
+                    passageiros[cpf] = informacoes
+                    print(f'\n\033[1m{">> CADASTRO CONCLUÍDO <<":^60}\033[m\n\nProsseguindo com a compra da passagem...\n')
+                else:
+                    cpf = input('Informe o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
+            codigo_busca = int(input('Informe o código do voo para o qual deseja comprar a passagem: '))
+            while codigo_busca not in voos.keys():
+                codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja comprar a passagem: '))
+            if codigo_busca in voos_disponiveis:
+                voos[codigo_busca][5].append(cpf)
+                voos[codigo_busca][4] -= 1
+                if voos[codigo_busca][2] == 0:
+                    voos_disponiveis.remove(codigo_busca)
+                passageiros[cpf][2].append(codigo_busca)
+                print('\n\033[1m>> Venda concluída com sucesso! <<\033[m')
+            else:
+                print('Esse voo está lotado! Não foi possível realizar a compra da passagem.')
+            resposta = input('Deseja continuar comprando? [S/N]\n>> ').upper()
             while resposta != 'S' and resposta != 'N':
                 resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
-            if resposta == 'S':
-                print(f'\033[1m{">> CADASTRO DE PASSAGEIROS <<":^60}\033[m\n')
-                informacoes.clear()
-                informacoes.append(input('Informe o nome do novo passageiro: ').title())
-                informacoes.append(input('Informe o telefone do novo passageiro no modelo (XX)XXXXX-XXXX: '))
-                informacoes.append(list())
-                passageiros[cpf] = informacoes
-                print(f'\n\033[1m{">> CADASTRO CONCLUÍDO <<":^60}\033[m\n\nProsseguindo com a compra da passagem...\n')
-            else:
-                cpf = input('Informe o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
-        codigo_busca = int(input('Informe o código do voo para o qual deseja comprar a passagem: '))
-        while codigo_busca not in voos.keys():
-            codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja comprar a passagem: '))
-        if codigo_busca in voos_disponiveis:
-            voos[codigo_busca][5].append(cpf)
-            voos[codigo_busca][4] -= 1
-            if voos[codigo_busca][2] == 0:
-                voos_disponiveis.remove(codigo_busca)
-            passageiros[cpf][2].append(codigo_busca)
-            print('\n\033[1m>> Venda concluída com sucesso! <<\033[m')
-        else:
-            print('Esse voo está lotado! Não foi possível realizar a compra da passagem.')
 
     elif opt == 5:
-        cpf = input('\nInforme o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
-        while cpf not in passageiros.keys():
-            cpf = input('O CPF digitado não consta nos registros. Informe novamente o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
-        codigo_busca = int(input('Informe o código do voo para o qual deseja cancelar a passagem: '))
-        while codigo_busca not in voos.keys():
-            codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja cancelar a passagem: '))
-        if cpf in voos[codigo_busca][5]:
-            voos[codigo_busca][5].remove(cpf)
-            voos[codigo_busca][4] += 1
-            if codigo_busca not in voos_disponiveis and voos[codigo_busca][2] > 0:
-                voos_disponiveis.append(codigo_busca)
-            passageiros[cpf][2].remove(codigo_busca)
-            print('\n\033[1m>> Passagem cancelada com sucesso! <<\033[m')
-        else:
-            print('O passageiro indicado não faz parte desse voo! Não foi possível realizar o cancelamento da passagen.')
+        resposta = 'S'
+        while resposta == 'S':
+            cpf = input('\nInforme o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
+            while cpf not in passageiros.keys():
+                cpf = input('O CPF digitado não consta nos registros. Informe novamente o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
+            codigo_busca = int(input('Informe o código do voo para o qual deseja cancelar a passagem: '))
+            while codigo_busca not in voos.keys():
+                codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja cancelar a passagem: '))
+            if cpf in voos[codigo_busca][5]:
+                voos[codigo_busca][5].remove(cpf)
+                voos[codigo_busca][4] += 1
+                if codigo_busca not in voos_disponiveis and voos[codigo_busca][2] > 0:
+                    voos_disponiveis.append(codigo_busca)
+                passageiros[cpf][2].remove(codigo_busca)
+                print('\n\033[1m>> Passagem cancelada com sucesso! <<\033[m')
+            else:
+                print('O passageiro indicado não faz parte desse voo! Não foi possível realizar o cancelamento da passagen.')
+            resposta = input('Deseja continuar cancelando? [S/N]\n>> ').upper()
+            while resposta != 'S' and resposta != 'N':
+                resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
     elif opt == 6:
         print('\nEncerrando o programa...\n')
         break
