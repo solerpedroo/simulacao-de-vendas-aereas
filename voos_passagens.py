@@ -1,13 +1,23 @@
 import os
 from random import randint
 
-voos = {1234: ['SP', 'BH', 2, 500.0, 107, ['123456789-00', '123456788-10', '147853698-11']], 1235: ['SP', 'BH', 0, 600.0, 120, []], 12366: ['SP', 'BH', 1, 550.0, 116, []]}
+def exibe_dados_voo(voo):
+    print(f'\033[1mCódigo:\033[m {voo[0]}\n\033[1mCidade de origem:\033[m {voo[1][0]}\n\033[1mCidade de destino:\033[m {voo[1][1]}\n\033[1mQuantidade de escalas:\033[m {voo[1][2]}\n\033[1mValor das passagens:\033[m R${voo[1][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}')
+
+voos = {1234: ['SP', 'BH', 2, 500.0, 107, ['123456789-00', '123456788-10', '147853698-11']], 1235: ['SP', 'BH', 0, 600.0, 120, []], 12366: ['SP', 'BH', 1, 550.0, 116, []],  1237: ['SP', 'BH', 0, 600.0, 120, []]}
+
 passageiros = {'123456789-00': ['Pessoa 1', '99999-1111', []], '123456788-10': ['Pessoa 2', '99999-1111', []], '147853698-11': ['Pessoa 3', '99999-1111', []]}
+
 voos_disponiveis = []
+
+for voo in voos.items():
+    if voo[1][2] > 0:
+        voos_disponiveis.append(voo[0])
+
 informacoes = []
 
 print('\n\n\t\033[1m=-=-=-=-= BEM VINDO(A) AO SISTEMA DE CONTROLE DE PASSAGENS AÉREAS =-=-=-=-=\033[m\n\n')
-print('O sistema serve para cadastrar e consultar voos, consultar passsageiros e vender e cancelar passagens\n')
+print('O sistema serve para cadastrar e consultar voos e passsageiros e vender e cancelar passagens\n')
 input('\n\t<< Tecle Enter para continuar >>')
 
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -40,11 +50,12 @@ while opt != 6:
                 achou = 0
                 for voo in voos.items():
                     if voo[0] == codigo_busca:
-                        print(f'\n\033[1mCódigo:\033[m {voo[0]}\n\033[1mCidade de origem:\033[m {voo[1][0]}\n\033[1mCidade de destino:\033[m {voo[1][1]}\n\033[1mQuantidade de escalas:\033[m {voo[1][2]}\n\033[1mValor das passagens:\033[m R$ {voo[1][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}')
+                        print('\n')
+                        exibe_dados_voo(voo)
                         achou = 1
                         break
                 if achou == 0:
-                    print(f'\n\033[1;31m{">> Voo não encontrado <<":^60}\033[m')
+                    print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
                     
             elif opt == 2:
                 cidade_origem = input('\nInforme a cidade de origem para consulta: ').upper()
@@ -53,11 +64,11 @@ while opt != 6:
                 print('-'*60)
                 for voo in voos.items():
                     if voo[1][0] == cidade_origem.upper():
-                        print(f'\n\033[1mCódigo:\033[m {voo[0]}\n\033[1mCidade de origem:\033[m {voo[1][0]}\n\033[1mCidade de destino:\033[m {voo[1][1]}\n\033[1mQuantidade de escalas:\033[m {voo[1][2]}\n\033[1mValor das passagens:\033[m R$ {voo[1][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}\n')
+                        exibe_dados_voo(voo)
                         print('-'*60)
                         achou = 1
                 if achou == 0:
-                    print(f'\n\033[1;31m{">> Voo não encontrado <<":^60}\033[m')
+                    print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
 
             elif opt == 3:
                 cidade_destino = input('\nInforme a cidade de destino para consulta: ').upper()
@@ -66,11 +77,11 @@ while opt != 6:
                 print('-'*60)
                 for voo in voos.items():
                     if voo[1][1] == cidade_destino.upper():
-                        print(f'\n\033[1mCódigo:\033[m {voo[0]}\n\033[1mCidade de origem:\033[m {voo[1][0]}\n\033[1mCidade de destino:\033[m {voo[1][1]}\n\033[1mQuantidade de escalas:\033[m {voo[1][2]}\n\033[1mValor das passagens:\033[m R$ {voo[1][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}\n')
+                        exibe_dados_voo(voo)
                         print('-'*60)
                         achou = 1
                 if achou == 0:
-                    print(f'\n\033[1;31m{">> Voo não encontrado <<":^60}\033[m')
+                    print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
 
             elif opt == 4:
                 cidade_origem = input('\nInforme a cidade de origem para consulta: ').upper()
@@ -82,22 +93,25 @@ while opt != 6:
                         achou = 1
                         if cont == 0:
                             menor = voo[1][2]
-                            chave_menor = voo[0]
                         else:
                             if voo[1][2] < menor:
                                 menor = voo[1][2]
-                                chave_menor = voo[0]
                         cont += 1
                 if achou == 1:
-                    print(f'\n\033[1mVoo com menor escala: \nCódigo:\033[m {chave_menor}\n\033[1mCidade de origem:\033[m {voos[chave_menor][0]}\n\033[1mCidade de destino:\033[m {voos[chave_menor][1]}\n\033[1mQuantidade de escalas:\033[m {voos[chave_menor][2]}\n\033[1mValor das passagens:\033[m R$ {voos[chave_menor][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voos[chave_menor][4]}\n')
+                    print(f'\n\033[1m{f">> VOOS COM MENOR ESCALA SAINDO DE {cidade_origem} COM DESTINO A {cidade_destino} <<":^60}\033[m')
+                    print('-'*60)
+                    for voo in voos.items():
+                        if voo[1][2] == menor:
+                            exibe_dados_voo(voo)
+                            print('-'*60)
                 else:
-                    print(f'\n\033[1;31m{">> Voo não encontrado <<":^60}\033[m')
+                    print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
 
             elif opt == 5:
                 print(f'\n{">> VOOS CADASTRADOS <<":^60}')
                 print('-'*60)
                 for voo in voos.items():
-                    print(f'\033[1mCódigo:\033[m {voo[0]}\n\033[1mCidade de origem:\033[m {voo[1][0]}\n\033[1mCidade de destino:\033[m {voo[1][1]}\n\033[1mQuantidade de escalas:\033[m {voo[1][2]}\n\033[1mValor das passagens:\033[m R$ {voo[1][3]}\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}')
+                    exibe_dados_voo(voo)
                     print('-'*60)
 
             else:
@@ -111,40 +125,56 @@ while opt != 6:
             if voo[0] == codigo_busca:
                 print(f'\n\033[1mQuantidade de lugares disponíveis:\033[m {voo[1][4]}\n\033[1mPassageiros do voo: \033[m')
                 for passageiro in voo[1][5]:
-                    print(f'- \033[1mNome:\033[m {passageiros[passageiro][0]}; \033[1mCPF:\033[m {passageiro}')
+                    print(f'- \033[1mNome:\033[m {passageiros[passageiro][0]}; \033[1mCPF:\033[m {passageiro}; \033[1mTelefone:\033[m {passageiros[passageiro][1]}')
                     achou_passageiro = 1
                 if achou_passageiro == 0:
                     print('Esse voo ainda não possui passageiros')
                 achou = 1
                 break
         if achou == 0:
-            print(f'\n\033[1;31m{">> Voo não encontrado <<":^60}\033[m')
+            print(f'\n\033[1;31m{">> VOO NÃO ENCONTRADO <<":^60}\033[m')
 
     elif opt == 4:
-        cpf = input('\nInforme o CPF do comprador da passagem: ')
+        cpf = input('\nInforme o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
         while cpf not in passageiros.keys():
-            cpf = input('O CPF digitado não consta nos registros. Informe novamente o CPF do comprador da passagem: ')
+            resposta = input('O CPF digitado não consta nos registros.\nDeseja cadastrá-lo no sistema? [S/N]\n>> ').upper()
+            while resposta != 'S' and resposta != 'N':
+                resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
+            if resposta == 'S':
+                print(f'\033[1m{">> CADASTRO DE PASSAGEIROS <<":^60}\033[m\n')
+                informacoes.clear()
+                informacoes.append(input('Informe o nome do novo passageiro: ').title())
+                informacoes.append(input('Informe o telefone do novo passageiro no modelo (XX)XXXXX-XXXX: '))
+                informacoes.append(list())
+                passageiros[cpf] = informacoes
+                print(f'\n\033[1m{">> CADASTRO CONCLUÍDO <<":^60}\033[m\n\nProsseguindo com a compra da passagem...\n')
+            else:
+                cpf = input('Informe o CPF do comprador da passagem seguindo o modelo XXX.XXX.XXX-XX: ')
         codigo_busca = int(input('Informe o código do voo para o qual deseja comprar a passagem: '))
         while codigo_busca not in voos.keys():
             codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja comprar a passagem: '))
-        if voos[codigo_busca][4] > 0:
+        if codigo_busca in voos_disponiveis:
             voos[codigo_busca][5].append(cpf)
             voos[codigo_busca][4] -= 1
+            if voos[codigo_busca][2] == 0:
+                voos_disponiveis.remove(codigo_busca)
             passageiros[cpf][2].append(codigo_busca)
             print('\n\033[1m>> Venda concluída com sucesso! <<\033[m')
         else:
             print('Esse voo está lotado! Não foi possível realizar a compra da passagem.')
 
     elif opt == 5:
-        cpf = input('\nInforme o CPF em que deseja cancelar a passagem: ')
+        cpf = input('\nInforme o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
         while cpf not in passageiros.keys():
-            cpf = input('O CPF digitado não consta nos registros. Informe novamente o CPF em que deseja cancelar a passagem: ')
+            cpf = input('O CPF digitado não consta nos registros. Informe novamente o CPF em que deseja cancelar a passagem seguindo o modelo XXX.XXX.XXX-XX: ')
         codigo_busca = int(input('Informe o código do voo para o qual deseja cancelar a passagem: '))
         while codigo_busca not in voos.keys():
             codigo_busca = int(input('O voo informado não consta nos registros. Informe novamente o código do voo para o qual deseja cancelar a passagem: '))
         if cpf in voos[codigo_busca][5]:
             voos[codigo_busca][5].remove(cpf)
             voos[codigo_busca][4] += 1
+            if codigo_busca not in voos_disponiveis and voos[codigo_busca][2] > 0:
+                voos_disponiveis.append(codigo_busca)
             passageiros[cpf][2].remove(codigo_busca)
             print('\n\033[1m>> Passagem cancelada com sucesso! <<\033[m')
         else:
