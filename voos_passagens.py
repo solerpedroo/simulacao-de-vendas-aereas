@@ -10,11 +10,11 @@ passageiros = {'123456789-00': ['Pessoa 1', '99999-1111', []], '123456788-10': [
 
 voos_disponiveis = []
 
+informacoes = []
+
 for voo in voos.items():
     if voo[1][2] > 0:
         voos_disponiveis.append(voo[0])
-
-informacoes = []
 
 print('\n\n\t\033[1m=-=-=-=-= BEM VINDO(A) AO SISTEMA DE CONTROLE DE PASSAGENS AÉREAS =-=-=-=-=\033[m\n\n')
 print('O sistema serve para cadastrar e consultar voos e passsageiros e vender e cancelar passagens\n')
