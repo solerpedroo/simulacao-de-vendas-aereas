@@ -194,7 +194,8 @@ while opt != 6:
                     voos[codigo_busca][4] -= 1
                     if voos[codigo_busca][2] == 0:
                         voos_disponiveis.remove(codigo_busca)
-                    passageiros[cpf][2].append(codigo_busca)
+                    if codigo_busca not in passageiros[cpf][2]:
+                        passageiros[cpf][2].append(codigo_busca)
                     print('\n\033[1m>> Venda concluída com sucesso! <<\033[m')
                 else:
                     print('Esse voo está lotado! Não foi possível realizar a compra da passagem.')
