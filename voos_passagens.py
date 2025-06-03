@@ -35,7 +35,7 @@ while opt != 6:
             num_voo = randint(1000, 9999)
             while num_voo in voos.keys():
                 num_voo = randint(1000, 9999)
-            informacoes.clear()
+            informacoes = []
             informacoes.append(input('\nInforme a cidade de origem: ').upper())
             informacoes.append(input('Informe a cidade de destino: ').upper())
             informacoes.append(int(input('Informe a quantidade de escalas: ')))
@@ -144,7 +144,7 @@ while opt != 6:
 
     elif opt == 3:
         if voos != {} and passageiros != {}:
-            if passagens == []:
+            if passagens != []:
                 codigo_busca = int(input('\nInforme o código do voo para consultar os passageiros: '))
                 achou = 0
                 achou_passageiro = 0
@@ -176,7 +176,7 @@ while opt != 6:
                         resposta = input('Resposta inválida. Digite "S" para SIM e "N" para NÃO.\n>> ').upper()
                     if resposta == 'S':
                         print(f'\033[1m{">> CADASTRO DE PASSAGEIROS <<":^60}\033[m\n')
-                        informacoes.clear()
+                        informacoes = []
                         informacoes.append(input('Informe o nome do novo passageiro: ').title())
                         informacoes.append(input('Informe o telefone do novo passageiro no modelo (XX)XXXXX-XXXX: '))
                         informacoes.append(list())
