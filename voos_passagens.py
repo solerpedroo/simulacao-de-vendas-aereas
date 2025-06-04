@@ -192,7 +192,7 @@ while opt != 6:
                         voos[codigo_busca][5].append(cpf)
                     passagens.append([codigo_busca,cpf])
                     voos[codigo_busca][4] -= 1
-                    if voos[codigo_busca][2] == 0:
+                    if voos[codigo_busca][4] == 0:
                         voos_disponiveis.remove(codigo_busca)
                     if codigo_busca not in passageiros[cpf][2]:
                         passageiros[cpf][2].append(codigo_busca)
